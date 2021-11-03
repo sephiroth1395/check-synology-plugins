@@ -149,19 +149,19 @@ def get_snmp_table(table_oid, args):
     return table
 
 
-def exit_plugin(returncode, output):
+def exit_plugin(returncode, output, perfdata):
     """ Check status and exit accordingly """
     if returncode == "3":
         print("UNKNOWN - " + str(output))
         sys.exit(3)
     if returncode == "2":
-        print("CRITICAL - " + str(output))
+        print("CRITICAL - " + str(output) + " | " + str(perfdata))
         sys.exit(2)
     if returncode == "1":
-        print("WARNING - " + str(output))
+        print("WARNING - " + str(output) + " | " + str(perfdata))
         sys.exit(1)
     elif returncode == "0":
-        print("OK - " + str(output))
+        print("OK - " + str(output) + " | " + str(perfdata))
         sys.exit(0)
 
 
