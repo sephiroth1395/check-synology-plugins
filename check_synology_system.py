@@ -215,9 +215,9 @@ def main():
 
     # Evaluate against disk thresholds
     returncode = "0"
-    if returnwarn = True:
+    if returnwarn == True:
         returncode = "1"
-    if returncrit = True:
+    if returncrit == True:
         returncode = "2"
 
     exit_plugin(returncode, output, perfdata)
