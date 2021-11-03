@@ -162,7 +162,7 @@ def main():
         # Check if we received data via SNMP, otherwise exit with state Unknown
         exit_plugin("3", "No data returned via SNMP", "NULL")
 
-    for i in systemhealth:
+    for i in systemhealth_data:
         # Extract values from returned table
         if str(i[0]) == '1.3.6.1.4.1.6574.1.1':
             systemStatus = int(i[1])
