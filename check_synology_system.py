@@ -209,15 +209,13 @@ def main():
     perfdata = ''.join(["\'temperature\'=", str(temperature), ";",
                         str(args.warn), ";", str(args.crit), ";; "])
 
-    # Evaluate against disk thresholds
-    returncode = "0"
+    # Set return code
     if returnwarn == True:
         returncode = "1"
-    if returncrit == True:
+    elif returncrit == True:
         returncode = "2"
-
-    # Default output
-    if returncode == 0:
+    else:
+        returncode = "0"
         output = ''.join('System is OK.')
 
     exit_plugin(returncode, output, perfdata)
