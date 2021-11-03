@@ -175,7 +175,7 @@ def main():
         if str(i[0]) == '1.3.6.1.4.1.6574.1.4.2.0':
             cpuFanStatus = int(i[1])
         if str(i[0]) == '1.3.6.1.4.1.6574.1.5.4.0':
-            upgrableAvailable = int(i[1])            
+            upgradeAvailable = int(i[1])            
 
     returnwarn = False
     returncrit = False
