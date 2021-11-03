@@ -184,7 +184,7 @@ def main():
         exit_plugin("3", "No data returned via SNMP")
 
     # Extract OID identifier from OID
-    for entry in chain(disk_ids, disk_states):
+    for entry in chain(disk_ids, disk_states, disk_temperatures):
         entry[0] = entry[0].strip().split(".")[-1:]
         entry[0] = "".join(map(str, entry[0]))
         entry[1] = entry[1].strip()
