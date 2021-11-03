@@ -198,6 +198,7 @@ def main():
     returnwarn = False
     returncrit = False
     output = ""
+    perfdata = ""
 
     for i in diskids:
         # loop through disl ids
@@ -221,6 +222,9 @@ def main():
         # Append to output and perfdata string
         output += ''.join([disk_name, ": ", disk_state_dict[str(disk_state)],
                            " (", disk_temperature, "), "])
+        perfdata += ''.join(["\'" disk_name, "_", disk_state_dict[str(disk_state)], 
+                        "_" , "temperature\'=", str(disk_temperature), ";",
+                        str(args.warn), ";", str(args.crit), ";; "])
 
         # Evaluate against disk state
         if int(disk_state) in states_crit:
@@ -243,7 +247,7 @@ def main():
     else:
         returncode = "0"
 
-    exit_plugin(returncode, output)
+    exit_plugin(returncode, output, perfdata)
 
 if __name__ == "__main__":
     main()
