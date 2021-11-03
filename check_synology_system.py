@@ -205,10 +205,6 @@ def main():
         output = ''.join('Temperature: ', str(temperature), ' degrees. ')
         returncrit = True
 
-    # Default output
-    if returncode == 0:
-        output = ''.join('System is OK.')
-
     # Construct perfdata string
     perfdata = ''.join(["\'temperature\'=", str(temperature), ";",
                         str(args.warn), ";", str(args.crit), ";; "])
@@ -219,6 +215,10 @@ def main():
         returncode = "1"
     if returncrit == True:
         returncode = "2"
+
+    # Default output
+    if returncode == 0:
+        output = ''.join('System is OK.')
 
     exit_plugin(returncode, output, perfdata)
 
