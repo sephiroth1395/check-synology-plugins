@@ -179,30 +179,31 @@ def main():
 
     returnwarn = False
     returncrit = False
+    output = ""
 
     # Evaluate binary metrics
     if systemStatus == 2:
-        output = ''.join('System partition failed. ')
+        output += ''.join('System partition failed. ')
         returncrit = True
     if powerStatus == 2:
-        output = ''.join('Power supply failed. ')
+        output += ''.join('Power supply failed. ')
         returncrit = True
     if systemFanStatus == 2:
-        output = ''.join('System fan failed. ')
+        output += ''.join('System fan failed. ')
         returncrit = True
     if cpuFanStatus == 2:
-        output = ''.join('CPU fan failed. ')
+        output += ''.join('CPU fan failed. ')
         returncrit = True
     if upgradeAvailable == 1:
-        output = ''.join('DSM update available. ')
+        output += ''.join('DSM update available. ')
         returnwarn = True
 
     # Evaluate temperature
     if temperature >= args.warn:
-        output = ''.join('Temperature: ', str(temperature), ' degrees. ')
+        output += ''.join('Temperature: ', str(temperature), ' degrees. ')
         returnwarn = True
-    if temperature >= args.crit:
-        output = ''.join('Temperature: ', str(temperature), ' degrees. ')
+    elif temperature >= args.crit:
+        output += ''.join('Temperature: ', str(temperature), ' degrees. ')
         returncrit = True
 
     # Construct perfdata string
