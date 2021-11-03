@@ -164,17 +164,17 @@ def main():
 
     for i in systemhealth_data:
         # Extract values from returned table
-        if str(i[0]) == '1.3.6.1.4.1.6574.1.1':
+        if str(i[0]) == '1.3.6.1.4.1.6574.1.1.0':
             systemStatus = int(i[1])
-        if str(i[0]) == '1.3.6.1.4.1.6574.1.2':
+        if str(i[0]) == '1.3.6.1.4.1.6574.1.2.0':
             temperature = int(i[1])
-        if str(i[0]) == '1.3.6.1.4.1.6574.1.3':
+        if str(i[0]) == '1.3.6.1.4.1.6574.1.3.0':
             powerStatus = int(i[1])
-        if str(i[0]) == '1.3.6.1.4.1.6574.1.4.1':
+        if str(i[0]) == '1.3.6.1.4.1.6574.1.4.1.0':
             systemFanStatus = int(i[1])
-        if str(i[0]) == '1.3.6.1.4.1.6574.1.4.2':
+        if str(i[0]) == '1.3.6.1.4.1.6574.1.4.2.0':
             cpuFanStatus = int(i[1])
-        if str(i[0]) == '1.3.6.1.4.1.6574.1.5.4':
+        if str(i[0]) == '1.3.6.1.4.1.6574.1.5.4.0':
             upgrableAvailable = int(i[1])            
 
     returnwarn = False
