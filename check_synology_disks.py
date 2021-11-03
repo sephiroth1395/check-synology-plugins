@@ -7,6 +7,7 @@
 #
 #
 # Author        : Mauno Erhardt <mauno.erhardt@burkert.com>
+#                   with additions from Eric Viseur <eric.viseur@gmail.com>
 # Copyright     : (c) 2021 Burkert Fluid Control Systems
 # Source        : https://github.com/m-erhardt/check-synology-plugins
 # License       : GPLv3 (http://www.gnu.org/licenses/gpl-3.0.txt)
@@ -91,6 +92,12 @@ def get_args():
                         help="SNMPv3 privacy mode", type=str, dest='privmode',
                         default='AES',
                         choices=['DES', '3DES', 'AES', 'AES192', 'AES256'])
+    parser.add_argument("-w", "--warn", required=False,
+                        help="Temperature warning threshold (in degrees)",
+                        type=float, dest='warn', default="60")
+    parser.add_argument("-c", "--crit", required=False,
+                        help="Temperature critical threshold (in degrees)",
+                        type=float, dest='crit', default="70")                        
     args = parser.parse_args()
     return args
 
@@ -167,8 +174,10 @@ def main():
     # Get data via SNMP from SYNOLOGY-DISK-MIB
     #    SYNOLOGY-DISK-MIB::diskID
     #    SYNOLOGY-DISK-MIB::diskStatus
+    #    SYNOLOGY-DISK-MID::diskTemperature
     disk_ids = get_snmp_table('1.3.6.1.4.1.6574.2.1.1.2', args)
     disk_states = get_snmp_table('1.3.6.1.4.1.6574.2.1.1.5', args)
+    disk_temperatures = get_snmp_table('1.3.6.1.4.1.6574.2.1.1.6', args)
 
     if len(disk_ids) == 0 or len(disk_states) == 0:
         # Check if we received data via SNMP, otherwise exit with state Unknown
@@ -185,8 +194,9 @@ def main():
     for i in disk_ids:
         diskids.append(i[0])
 
-    # Set return code and generate output and perfdata strings
-    returncode = "0"
+    # Generate output and perfdata strings
+    returnwarn = False
+    returncrit = False
     output = ""
 
     for i in diskids:
@@ -203,16 +213,35 @@ def main():
             if str(entry[0]) == str(disk):
                 disk_state = str(entry[1])
 
+        for entry in disk_temperatures:
+            # loop through list with volume states
+            if str(entry[0]) == str(disk):
+                disk_temperature = str(entry[1])
+
         # Append to output and perfdata string
         output += ''.join([disk_name, ": ", disk_state_dict[str(disk_state)],
-                           ", "])
+                           " (", disk_temperature, "), "])
 
         # Evaluate against disk state
         if int(disk_state) in states_crit:
-            returncode = "2"
+            returncrit = True
+
+        # Evaluate against temperature
+        if int(disk_temperature) >= args.warn:
+            returnwarn = True
+        if int(disk_temperature) >= args.crit:
+            returncrit = True
 
     # Remove last comma from output string
     output = output.rstrip(', ')
+
+    # Set return code
+    if returnwarn == True:
+        returncode = "1"
+    elif returncrit == True:
+        returncode = "2"
+    else:
+        returncode = "0"
 
     exit_plugin(returncode, output)
 
